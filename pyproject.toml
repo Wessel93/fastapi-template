@@ -14,6 +14,8 @@ python = "^3.11"
 fastapi = "*"
 python-dotenv = "*"
 uvicorn = "*"
+random2 = "^1.0.2"
+datetime= "^5.4"
 
 [build-system]
 requires = ["poetry-core"]

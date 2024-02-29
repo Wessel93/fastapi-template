@@ -7,6 +7,8 @@ from pydantic import BaseModel
 import os
 import logging
 import sys
+import random
+from datetime import datetime
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
@@ -72,15 +74,44 @@ async def post_something_for_sanne(payload: MyPayload, dependencies=Depends(requ
     return JSONResponse(status_code=200, content={"message": "Success", "new_string": new_string})
 
 
-@app.get("/get-something")
-async def get_something(id: int, api_key: str = Depends(key_query_scheme)):
+@app.get("/what-kind-of-snack-are-we-getting-wessel")
+async def get_him_candy(api_key: str = Depends(key_query_scheme)):
     """GET Something."""
     
     # check API key
     if api_key != os.environ["API_KEY"]:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
-    return JSONResponse(status_code=200, content={"message": f"this is the data of registration {id}"})
+    candy = random.choice(['Dropje', 'Pinda', 'Bounty', 'Snickers'])
+
+    return JSONResponse(status_code=200, content={"message": f"Wessel is getting a {candy}"})
+
+
+@app.get("/who-is-getting-it-for-him")
+async def get_him_candy(overwrite: str, api_key: str = Depends(key_query_scheme)):
+    """GET Something."""
+
+    # check API key
+    if api_key != os.environ["API_KEY"]:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    person = random.choice(['Tim', 'Aki', 'Suleiman', 'Jacopo', 'Sanne'])
+    if overwrite:
+        person = overwrite
+
+    return JSONResponse(status_code=200, content={"message": f"{person} is getting Wessel a snack"})
+
+@app.get("/what-time-is-it")
+async def get_the_time(api_key: str = Depends(key_query_scheme)):
+    """GET Something."""
+
+    # check API key
+    if api_key != os.environ["API_KEY"]:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    now = datetime.now().strftime("%H:%M:%S")
+
+    return JSONResponse(status_code=200, content={"message": f"It now is {now}. We all know what that means; IT'S TIME"})
 
 
 if __name__ == "__main__":
